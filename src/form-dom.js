@@ -1,3 +1,13 @@
+import { checkValid } from "./form-validator";
+
+const emailRegExp =
+  /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+
+const countryRegExp = /^[a-zA-Z]+$/;
+const zipRegExp = /^[0-9]+$/;
+const passwordRegExp =
+  /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\s!"#$%&'()*+,\-./:;<=>?@[\\\]^_`{|}~])[a-zA-Z\d\s!"#$%&'()*+,\-./:;<=>?@[\\\]^_`{|}~]+$/;
+
 export function createForm() {
   const form = document.createElement("form");
   form.id = "myForm";
@@ -28,6 +38,10 @@ function createEmailInput() {
   emailInput.name = "email";
   emailInput.required = true;
   emailInput.minLength = "3";
+  emailInput.placeholder = "test@test.com";
+  emailInput.addEventListener("input", () => {
+    checkValid(emailInput, emailRegExp);
+  });
 
   const errorSpan = document.createElement("span");
   errorSpan.classList.add("error");
@@ -59,6 +73,11 @@ function createCountryInput() {
   countryInput.name = "country";
   countryInput.required = true;
   countryInput.minLength = "3";
+  countryInput.placeholder = "Romania";
+  countryInput.autocomplete = "country";
+  countryInput.addEventListener("input", () => {
+    checkValid(countryInput, countryRegExp);
+  });
 
   const errorSpan = document.createElement("span");
   errorSpan.classList.add("error");
@@ -84,10 +103,14 @@ function createZipInput() {
   zipSpan.textContent = "Enter your zip code:";
 
   const zipInput = document.createElement("input");
-  zipInput.type = "number";
+  zipInput.type = "text";
   zipInput.id = "zip";
   zipInput.name = "zip";
   zipInput.required = true;
+  zipInput.placeholder = "021415610";
+  zipInput.addEventListener("input", () => {
+    checkValid(zipInput, zipRegExp);
+  });
 
   const errorSpan = document.createElement("span");
   errorSpan.classList.add("error");
@@ -117,6 +140,11 @@ function createPasswordInput() {
   passwordInput.id = "password";
   passwordInput.name = "password";
   passwordInput.required = true;
+  passwordInput.minLength = 8;
+  passwordInput.placeholder = "vErYsEcurePa$$w0rd";
+  passwordInput.addEventListener("input", () => {
+    checkValid(passwordInput, passwordRegExp);
+  });
 
   const errorSpan = document.createElement("span");
   errorSpan.classList.add("error");
@@ -146,6 +174,7 @@ function createPasswordConfirmInput() {
   passwordConfirmInput.id = "passwordConfirm";
   passwordConfirmInput.name = "passwordConfirm";
   passwordConfirmInput.required = true;
+  passwordConfirmInput.placeholder = "vErYsEcurePa$$w0rd";
 
   const errorSpan = document.createElement("span");
   errorSpan.classList.add("error");
