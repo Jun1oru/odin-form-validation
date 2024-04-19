@@ -45,14 +45,34 @@ form div label {
     flex-direction: column;
 }
 
-#emailDiv {
+#emailDiv, #submitButtonDiv {
     grid-column: span 2;
     justify-content: center;
 }
 
-form div label span {
+form div label span,
+#submitButton {
     font-size: 1.3rem;
     text-align: center;
+}
+
+#submitButton {
+    margin-top: 2rem;
+    width: 20rem;
+    background-color: rgba(39, 228, 39, 0.493);
+    border-radius: 10rem;
+    height: 2.5rem;
+    font-weight: bold;
+}
+
+#submitButton:hover {
+    transform: scale(1.1);
+    filter: brightness(0.8);
+}
+
+#submitButton:active {
+    transform: scale(1.2);
+    filter: brightness(0.6);
 }
 
 .error {
@@ -68,6 +88,7 @@ form div label span {
     font-weight: bold;
 
     opacity: 0;
+    transition: 2s all;
 }
 
 .error.active {

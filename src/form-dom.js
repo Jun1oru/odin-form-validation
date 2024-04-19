@@ -8,16 +8,26 @@ const zipRegExp = /^[0-9]+$/;
 const passwordRegExp =
   /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\s!"#$%&'()*+,\-./:;<=>?@[\\\]^_`{|}~])[a-zA-Z\d\s!"#$%&'()*+,\-./:;<=>?@[\\\]^_`{|}~]+$/;
 
+let formValid = false;
+
 export function createForm() {
   const form = document.createElement("form");
   form.id = "myForm";
   form.noValidate = true;
+  form.addEventListener("submit", (e) => {
+    if (!formValid) {
+      e.preventDefault();
+    } else {
+      window.alert("Account created!");
+    }
+  });
 
   form.appendChild(createEmailInput());
   form.appendChild(createCountryInput());
   form.appendChild(createZipInput());
   form.appendChild(createPasswordInput());
   form.appendChild(createPasswordConfirmInput());
+  form.appendChild(createSubmitButton());
 
   return form;
 }
@@ -170,11 +180,14 @@ function createPasswordConfirmInput() {
   passwordConfirmSpan.textContent = "Confirm your password:";
 
   const passwordConfirmInput = document.createElement("input");
-  passwordConfirmInput.type = "passwordConfirm";
+  passwordConfirmInput.type = "password";
   passwordConfirmInput.id = "passwordConfirm";
   passwordConfirmInput.name = "passwordConfirm";
   passwordConfirmInput.required = true;
   passwordConfirmInput.placeholder = "vErYsEcurePa$$w0rd";
+  passwordConfirmInput.addEventListener("input", () => {
+    checkValid(passwordConfirmInput, passwordRegExp);
+  });
 
   const errorSpan = document.createElement("span");
   errorSpan.classList.add("error");
@@ -187,4 +200,41 @@ function createPasswordConfirmInput() {
   passwordConfirmDiv.appendChild(passwordConfirmLabel);
 
   return passwordConfirmDiv;
+}
+
+function createSubmitButton() {
+  const submitButtonDiv = document.createElement("div");
+  submitButtonDiv.id = "submitButtonDiv";
+
+  const submitButton = document.createElement("button");
+  submitButton.type = "submit";
+  submitButton.id = "submitButton";
+  submitButton.name = "submitButton";
+  submitButton.textContent = "Submit";
+  submitButton.addEventListener("click", (e) => {
+    let count = 0;
+    const inputs = document.getElementsByTagName("input");
+    const inputsArr = Array.from(inputs);
+    const regExpArr = [
+      emailRegExp,
+      countryRegExp,
+      zipRegExp,
+      passwordRegExp,
+      passwordRegExp,
+    ];
+    inputsArr.forEach((input, index) => {
+      if (checkValid(input, regExpArr[index]) === "valid") {
+        count++;
+      }
+    });
+    if (count === 5) {
+      formValid = true;
+    } else {
+      formValid = false;
+    }
+  });
+
+  submitButtonDiv.appendChild(submitButton);
+
+  return submitButtonDiv;
 }

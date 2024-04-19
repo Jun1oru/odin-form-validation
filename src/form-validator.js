@@ -1,12 +1,11 @@
 // const form = document.querySelector("form");
 // const email = document.getElementById("email");
 // const emailError = email.nextElementSibling;
-
 export function checkValid(input, exp) {
-  const error = input.nextElementSibling;
+  let error = input.nextElementSibling;
   if (isEmpty(input)) {
     input.className = "invalid";
-    error.textContent = "You can't leave this input blank.";
+    error.textContent = "You can't leave this input field blank.";
     error.className = "error active";
   } else if (isFormatWrong(input, exp)) {
     input.className = "invalid";
@@ -16,7 +15,7 @@ export function checkValid(input, exp) {
       error.textContent = "Wrong format! Ex: Romania or romania";
     } else if (input.name === "zip") {
       error.textContent = "Wrong format! Ex: 123456";
-    } else if (input.name === "password") {
+    } else if (input.name === "password" || input.name === "passwordConfirm") {
       if (input.value.search(/[a-z]/) === -1) {
         error.textContent =
           "Your password needs to include at least 1 lowercase character.";
@@ -38,17 +37,31 @@ export function checkValid(input, exp) {
     error.textContent = `Please input at least ${input.minLength} characters!`;
     error.className = "error active";
   } else if (input.name === "password" || input.name === "passwordConfirm") {
-    if (confirmPassword()) {
-      input.className = "invalid";
+    const passwordInput = document.getElementById("password");
+    const confirmPasswordInput = document.getElementById("passwordConfirm");
+    if (!confirmPassword(passwordInput, confirmPasswordInput)) {
+      passwordInput.className = "invalid";
+      error = input.nextElementSibling;
+      confirmPasswordInput.className = "invalid";
       error.textContent =
         "Password and confirm password fields must contain same password!";
       error.className = "error active";
+    } else {
+      passwordInput.className = "valid";
+      error = passwordInput.nextElementSibling;
+      error.className = "error";
+      error.textContent = "";
+      confirmPasswordInput.className = "valid";
+      error = confirmPasswordInput.nextElementSibling;
+      error.className = "error";
+      error.textContent = "";
     }
   } else {
     input.className = "valid";
-    error.textContent = "";
     error.className = "error";
+    error.textContent = "";
   }
+  return input.className;
 }
 
 function isEmpty(input) {
@@ -63,4 +76,6 @@ function isMinInput(input) {
   return input.value.length < input.minLength;
 }
 
-function confirmPassword(input) {}
+function confirmPassword(passwordInput, confirmPasswordInput) {
+  return passwordInput.value === confirmPasswordInput.value;
+}
